@@ -1,5 +1,27 @@
- <ul>
- {% for news in latest_news_list %}
-     <li><a href="{{ news.link }}">{{ news.title }}</a></li>
- {% endfor %}
- </ul>
+<html>
+<head>
+<title>ITNews RSS Reader</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Bootstrap -->
+{% load staticfiles %}
+<link href="{% static 'news/css/bootstrap.css' %}" rel="stylesheet">
+<link href="{% static 'news/css/bootstrap-responsive.css' %}" rel="stylesheet">
+</head>
+<body> 
+<div class="container">
+    <div class="row">
+        <div class="span12">
+        <h1> ITNews RSS Reader </h1>
+        <ul class="nav nav-pills nav-stacked">
+            <li class="active"> <a href="#">Most Recent</a> </li>
+            {% for news in latest_news_list %}
+            <li><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+            {% endfor %}
+        </ul>
+        </div>
+    </div>
+</div>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="{% static 'news/js/bootstrap.min.js' %}"></script>
+</body>
+</html>

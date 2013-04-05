@@ -62,7 +62,7 @@ class RSS :
                     entries['rss_type'] = rss_name
                     entries['published_parsed'] = int(time.mktime(entries['published_parsed']))
                     entries_json = json.dumps(entries)
-                    self._redis.rpush("list", entries_json)
+                    self._redis.lpush("list", entries_json)
                     self._redis.hset(hash_flag_name, hash_flag, "1")
                     # insert the data, key is id
                     name_rss_data = self.__redis_name_rss_data(rss_name, hash_flag)
