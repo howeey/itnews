@@ -15,7 +15,7 @@
         <ul class="nav nav-pills nav-stacked">
             <li class="active"> <a href="#">Most Recent</a> </li>
             {% for news in latest_news_list %}
-            <li><a href="{{ news.link }}" target="_blank">{{ news.title }}</a></li>
+            <li><a href="{{ news.link }}" target="_blank"><strong>[{{news.rss_type}}]</strong> {{ news.title }}</a></li>
             {% endfor %}
         </ul>
         </div>

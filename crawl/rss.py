@@ -17,6 +17,12 @@ class RSS :
         },
         'tech2ipo' : {
             'RSS_URL' : "http://tech2ipo.feedsportal.com/c/34822/f/641707/index.rss"
+        },
+        'ucdchina' : {
+            'RSS_URL' : "http://ucdchina.com/rss/posts"
+        },
+        'socialbeta' : {
+            'RSS_URL' : "http://feed.feedsky.com/socialbeta"
         }
     }
 
@@ -44,7 +50,7 @@ class RSS :
         if None == hres :
             header = d.feed
             header['published_parsed'] = int(time.mktime(header['published_parsed']))
-            header['updated_parsed'] = int(time.mktime(header['updated_parsed']))
+            if 'updated_parsed' in header : header['updated_parsed'] = int(time.mktime(header['updated_parsed']))
             self._redis.set(hn, json.dumps(header))
         else :
             old_json = json.loads(hres)
@@ -53,6 +59,7 @@ class RSS :
         if newtime >= oldtime :
             # need update
             for entries in d.entries :
+                if 'id' not in entries : entries['id'] = entries['link'] 
                 hash_flag = "%s" % entries['id']
                 hash_flag_name = self.__redis_name_hash_flag(rss_name)
 
@@ -61,6 +68,7 @@ class RSS :
                     # need insert list
                     entries['rss_type'] = rss_name
                     entries['published_parsed'] = int(time.mktime(entries['published_parsed']))
+                    if 'updated_parsed' in entries : entries['updated_parsed'] = int(time.mktime(entries['updated_parsed']))
                     entries_json = json.dumps(entries)
                     self._redis.lpush("list", entries_json)
                     self._redis.hset(hash_flag_name, hash_flag, "1")

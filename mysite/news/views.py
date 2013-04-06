@@ -1,16 +1,23 @@
 # Create your views here.
 from django.http import HttpResponse
 from django.template import Context, loader
+from operator import itemgetter
 import redis
 import json
 
 def index(request):
     r = RSS_Storage()
+    link_map = {}
 
     latest_news_list = [] 
-    data = r.get_list_data(0, 100) 
+    data = r.get_list_data(0, 500) 
     for d in data :
-        latest_news_list.append(json.loads(d))
+        jd = json.loads(d)
+        if False == link_map.has_key(jd['link']) :
+            latest_news_list.append(jd)
+            link_map[jd['link']] = True
+
+    latest_news_list = sorted(latest_news_list, key=itemgetter('published_parsed'), reverse=True)
 
     template = loader.get_template('news/index.html') 
     context = Context({
